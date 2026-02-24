@@ -9,8 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^6.6.4",
     "@astrojs/react": "^4.4.2",
-    "@astrojs/vercel": "^9.0.4",
     "@fontsource/anton": "^5.2.7",
     "@fontsource/archivo-narrow": "^5.2.8",
     "@fontsource/bbh-sans-bartle": "^5.2.1",
