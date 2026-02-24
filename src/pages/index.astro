@@ -1,17 +1,210 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import PostIt from '../components/PostIt.astro';
+import { getCollection } from 'astro:content';
 
+const posts = await getCollection('posts');
+posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+// Featured post (first one)
+const featuredPost = posts[0];
+const otherPosts = posts.slice(1);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Chiamamial Guide">
+    <!-- Container for the sticky scroll effect -->
+    <div id="scroll-container" class="relative w-full">
+        <!-- Marquee Ticker Top -->
+        <div class="fixed top-0 left-0 w-full bg-black text-white z-[60] overflow-hidden whitespace-nowrap py-1 border-b border-white">
+            <div class="animate-marquee inline-block font-mono text-xs uppercase tracking-widest">
+                VIBE CODING — AI VIDEO GENERATION — VISUAL AI — GENERATIVE IMAGERY — VIBE CODING — AI VIDEO GENERATION — VISUAL AI — GENERATIVE IMAGERY — VIBE CODING — AI VIDEO GENERATION — VISUAL AI — GENERATIVE IMAGERY —
+            </div>
+        </div>
+
+        <main id="horizontal-scroll-content" class="h-screen flex flex-row fixed top-0 left-0 will-change-transform pt-8">
+            
+            <!-- Hero Section (Slide 1) -->
+            <section class="min-w-[100vw] md:min-w-[60vw] h-full flex flex-col justify-center px-12 md:px-24 border-r border-black bg-white relative">
+                <h1 class="text-6xl md:text-[10rem] lg:text-[12rem] leading-[0.8] font-display uppercase tracking-tighter relative z-10 text-black">
+                    Guide<br/>
+                    <span class="text-4xl md:text-6xl tracking-tight font-display text-transparent stroke-text block mt-4" style="-webkit-text-stroke: 2px #ff3300;">
+                        by Chiamamial
+                    </span>
+                </h1>
+                
+                <div class="mt-12 max-w-md bg-white border border-black p-6 relative">
+                    <div class="absolute -top-3 -left-3 bg-black text-white px-2 py-1 font-mono text-xs uppercase">Ref. 001</div>
+                    <p class="font-body text-lg font-bold leading-tight uppercase tracking-wide">
+                        Curated resources <br/> & digital aesthetics. <br/>
+                        <span class="text-orange-600 mt-4 block text-sm font-mono">SCROLL_X -> [EXPLORE]</span>
+                    </p>
+                    <div class="absolute bottom-2 right-2 w-12 h-4 bg-orange-600"></div>
+                </div>
+            </section>
+
+            <!-- Featured Post (Slide 2) -->
+            {featuredPost && (
+                <section class="min-w-[100vw] md:min-w-[80vw] lg:min-w-[50vw] h-full border-r border-black relative group bg-white">
+                    <a href={`/posts/${featuredPost.slug}`} class="block w-full h-full relative">
+                         <!-- Full height image -->
+                        <div class="absolute inset-0 group-hover:invert transition-all duration-100">
+                             {featuredPost.data.coverImage ? (
+                                 <img src={featuredPost.data.coverImage} alt={featuredPost.data.title} class="w-full h-full object-cover grayscale contrast-125" />
+                             ) : (
+                                 <div class="w-full h-full bg-neutral-100 flex items-center justify-center text-black font-display text-[15rem] leading-none uppercase">
+                                    01
+                                 </div>
+                             )}
+                        </div>
+
+                        <!-- Couture Overlay -->
+                        <div class="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <span class="bg-white text-black border border-black px-3 py-1 font-mono text-xs uppercase tracking-widest">
+                                    Issue No. {new Date(featuredPost.data.date).getMonth() + 1}
+                                </span>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="w-24 h-px bg-black"></span>
+                                    <span class="w-16 h-px bg-black"></span>
+                                    <span class="w-8 h-px bg-black"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/90 backdrop-blur-sm border border-black p-8 max-w-2xl relative">
+                                <div class="absolute -top-4 left-4 bg-orange-600 text-white px-2 py-1 font-mono text-xs uppercase">Featured</div>
+                                <h2 class="text-6xl md:text-8xl font-display uppercase leading-[0.85] mb-4 text-black">
+                                    {featuredPost.data.title}
+                                </h2>
+                                <div class="flex items-center gap-4 font-mono text-xs uppercase border-t border-black pt-4 mt-4">
+                                    <span>READING_TIME: 5M</span>
+                                    <span>//</span>
+                                    <span>CATEGORY: EDITORIAL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </section>
+            )}
+
+            <!-- Other Posts (Free-form Grid) -->
+            {otherPosts.map((post, i) => {
+                // Generate deterministic random-like styles based on index
+                const widths = ['min-w-[30vw]', 'min-w-[40vw]', 'min-w-[25vw]', 'min-w-[35vw]'];
+                const heights = ['h-[60vh]', 'h-[70vh]', 'h-[50vh]', 'h-[80vh]'];
+                const alignments = ['self-start', 'self-end', 'self-center', 'self-start mt-24'];
+                // Removed borders for cleaner couture look
+                
+                const widthClass = widths[i % widths.length];
+                const heightClass = heights[i % heights.length];
+                const alignClass = alignments[i % alignments.length];
+                
+                return (
+                <section class={`${widthClass} ${heightClass} ${alignClass} flex flex-col bg-white relative group mx-8 border border-black transition-all duration-300 hover:-translate-y-2`}>
+                    <!-- Image -->
+                    <div class="h-3/5 w-full relative overflow-hidden border-b border-black">
+                        <a href={`/posts/${post.slug}`} class="block w-full h-full relative">
+                             {post.data.coverImage ? (
+                                 <img src={post.data.coverImage} alt={post.data.title} class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                             ) : (
+                                 <div class="w-full h-full bg-neutral-50 flex items-center justify-center text-6xl font-display text-gray-200 uppercase">
+                                     {i < 9 ? `0${i+2}` : i+2}
+                                 </div>
+                             )}
+                             <!-- Sticker -->
+                             <div class="absolute top-4 right-4 w-12 h-12 rounded-full border border-white text-white flex items-center justify-center font-mono text-xs animate-spin-slow">
+                                 ★
+                             </div>
+                        </a>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="h-2/5 w-full p-6 flex flex-col justify-between bg-white relative overflow-hidden">
+                        <!-- Decorative background text -->
+                        <div class="absolute -right-4 -bottom-4 text-[8rem] font-display text-gray-100 leading-none select-none -z-0">
+                            {i < 9 ? `0${i+2}` : i+2}
+                        </div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="font-mono text-[10px] uppercase border border-black px-1">
+                                    {new Date(post.data.date).getFullYear()}
+                                </span>
+                            </div>
+                            <a href={`/posts/${post.slug}`}>
+                                <h2 class="text-3xl md:text-4xl font-display uppercase leading-[0.9] text-black group-hover:text-orange-600 transition-colors">
+                                    {post.data.title}
+                                </h2>
+                            </a>
+                        </div>
+                        
+                        <a href={`/posts/${post.slug}`} class="group/link flex items-center gap-2 mt-4 font-mono text-xs uppercase tracking-widest relative z-10">
+                            <span class="border-b border-black pb-0.5 group-hover:border-orange-600 group-hover:text-orange-600 transition-colors">Read Article</span>
+                        </a>
+                    </div>
+                </section>
+                );
+            })}
+            
+            <!-- Footer / End Slide -->
+            <section class="min-w-[100vw] md:min-w-[30vw] h-full flex flex-col justify-center items-center bg-black text-white px-12 text-center border-l border-white">
+                <div class="font-mono text-xs mb-8 flex flex-col gap-2">
+                    <span>END_OF_LINE</span>
+                    <span>///</span>
+                </div>
+                <h3 class="text-6xl font-display uppercase mb-4 tracking-tighter">Chiamamial</h3>
+                <a href="/" class="font-mono text-xs uppercase tracking-widest hover:text-orange-600 transition-colors">
+                    [ Back to Start ]
+                </a>
+            </section>
+
+        </main>
+        
+        <!-- Marquee Ticker Bottom -->
+        <div class="fixed bottom-0 left-0 w-full bg-white text-black z-[60] overflow-hidden whitespace-nowrap py-1 border-t border-black">
+            <div class="animate-marquee-reverse inline-block font-mono text-xs uppercase tracking-widest">
+                PROMPT ENGINEERING — LATENT SPACE EXPLORATION — DIFFUSION MODELS — NEURAL NETWORKS — PROMPT ENGINEERING — LATENT SPACE EXPLORATION — DIFFUSION MODELS — NEURAL NETWORKS —
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Virtual Horizontal Scroll Script
+        // This makes the body height equal to the horizontal content width
+        // and syncs window.scrollY to translateX
+        
+        function initVirtualScroll() {
+            const scrollContainer = document.getElementById('scroll-container');
+            const content = document.getElementById('horizontal-scroll-content');
+            
+            if (!scrollContainer || !content) return;
+
+            function updateHeight() {
+                // Set the body height to the width of the content
+                // Subtract window width because we scroll the overflow
+                // Add window height to ensure we can scroll to the very end
+                const contentWidth = content.scrollWidth;
+                const windowWidth = window.innerWidth;
+                const totalHeight = contentWidth - windowWidth + window.innerHeight;
+                
+                scrollContainer.style.height = `${totalHeight}px`;
+            }
+
+            function onScroll() {
+                const scrolled = window.scrollY;
+                content.style.transform = `translateX(-${scrolled}px)`;
+            }
+
+            // Init
+            updateHeight();
+            window.addEventListener('resize', updateHeight);
+            window.addEventListener('scroll', onScroll, { passive: true });
+            
+            // Initial calculation might need a small delay for images/layout
+            setTimeout(updateHeight, 100);
+            setTimeout(updateHeight, 500);
+        }
+
+        // Run on load and after Astro transitions if enabled
+        document.addEventListener('DOMContentLoaded', initVirtualScroll);
+    </script>
+</Layout>

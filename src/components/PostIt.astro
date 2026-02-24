@@ -1,0 +1,48 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  date: Date | string;
+  coverImage?: string;
+  category?: string;
+  class?: string;
+}
+
+const { title, slug, date, coverImage, category = "Editorial", class: className } = Astro.props;
+
+// Genera un placeholder deterministico se non c'è immagine
+const placeholderBg = `https://placehold.co/600x800/ebeae6/1a1a1a?text=${encodeURIComponent(title)}`;
+const image = coverImage || placeholderBg;
+---
+
+<a href={`/posts/${slug}`} class={`group block relative overflow-hidden ${className}`}>
+    <div class="relative w-full h-full aspect-[3/4] overflow-hidden">
+        <img 
+            src={image} 
+            alt={title} 
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale hover:grayscale-0"
+        />
+        
+        <!-- Overlay Text -->
+        <div class="absolute inset-0 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
+            <div class="flex justify-between items-start text-white mix-blend-difference">
+                <span class="text-xs font-bold tracking-[0.2em] uppercase writing-vertical rotate-180">
+                    {new Date(date).getFullYear()}
+                </span>
+                <span class="text-xs font-bold tracking-[0.2em] uppercase">
+                    {category}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 pr-8">
+        <h2 class="text-2xl md:text-4xl font-display leading-[0.9] uppercase break-words group-hover:text-gray-600 transition-colors">
+            {title}
+        </h2>
+        <div class="mt-2 flex items-center gap-4">
+             <span class="h-px w-8 bg-black"></span>
+             <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Read Article</span>
+        </div>
+    </div>
+</a>

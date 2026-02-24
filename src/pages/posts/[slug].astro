@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title}>
+    <div class="min-h-screen bg-white">
+        <!-- Technical Top Bar -->
+        <div class="fixed top-0 left-0 w-full h-8 bg-black text-white z-50 flex items-center justify-between px-4 font-mono text-[10px] uppercase border-b border-white">
+            <span>CHIAMAMIAL GUIDE / {new Date().getFullYear()}</span>
+            <span>READING_MODE: ACTIVE</span>
+            <span class="hidden md:inline">SCROLL_Y -> [READ]</span>
+        </div>
+
+        <!-- Article Header -->
+        <header class="pt-24 pb-12 px-6 md:px-12 border-b-2 border-black">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 border-b border-black pb-4">
+                     <div class="flex flex-col gap-2">
+                         <span class="bg-black text-white px-2 py-1 font-mono text-xs uppercase inline-block w-fit">
+                            Ref. {post.slug.substring(0, 3).toUpperCase()}
+                         </span>
+                         <span class="text-xs font-bold tracking-widest uppercase text-orange-600 font-mono">
+                            // CATEGORY: GUIDE
+                         </span>
+                     </div>
+                     <div class="flex flex-col items-end">
+                         <time class="text-lg font-display uppercase">
+                            {new Date(post.data.date).toLocaleDateString('en-GB').replace(/\//g, '.')}
+                         </time>
+                         <span class="font-mono text-[10px] uppercase">PUBLISHED_DATE</span>
+                     </div>
+                </div>
+
+                <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-display uppercase leading-[0.85] tracking-tight text-black mb-12">
+                    {post.data.title}
+                </h1>
+                
+                {post.data.coverImage && (
+                    <div class="w-full aspect-video border-2 border-black p-2 relative group">
+                        <div class="absolute top-4 left-4 z-10 bg-white border border-black px-2 py-1 font-mono text-xs uppercase">
+                            FIG. 01 — COVER
+                        </div>
+                        <img 
+                            src={post.data.coverImage} 
+                            alt={post.data.title}
+                            class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500"
+                        />
+                         <!-- Technical Crosshairs -->
+                         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-black/20 pointer-events-none"></div>
+                         <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-px bg-black/20 pointer-events-none"></div>
+                    </div>
+                )}
+            </div>
+        </header>
+
+        <!-- Article Content -->
+        <article class="max-w-3xl mx-auto px-6 py-16">
+            <div class="prose prose-xl prose-neutral font-sans 
+                prose-headings:font-display prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-black
+                prose-p:text-black prose-p:font-normal prose-p:leading-relaxed 
+                prose-a:text-orange-600 prose-a:no-underline prose-a:border-b-2 prose-a:border-black hover:prose-a:bg-black hover:prose-a:text-white hover:prose-a:border-transparent transition-colors
+                prose-strong:font-black prose-strong:bg-orange-100 prose-strong:px-1
+                prose-blockquote:border-l-4 prose-blockquote:border-black prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:pr-4
+                prose-img:border-2 prose-img:border-black prose-img:p-1 prose-img:bg-white
+                prose-code:font-mono prose-code:bg-gray-100 prose-code:text-orange-600 prose-code:px-1 prose-code:before:content-none prose-code:after:content-none
+                first-letter:text-7xl first-letter:font-display first-letter:float-left first-letter:mr-4 first-letter:leading-[0.8] first-letter:text-black">
+                <Content />
+            </div>
+
+            <!-- Footer Navigation -->
+            <div class="mt-24 pt-12 border-t-2 border-black flex flex-col md:flex-row justify-between items-center gap-8">
+                <a href="/" class="group flex items-center gap-4 border-2 border-black px-6 py-3 hover:bg-black hover:text-white transition-all w-full md:w-auto justify-center">
+                    <span class="text-xl font-bold">←</span>
+                    <span class="text-sm uppercase tracking-widest font-bold font-mono">Back to Index</span>
+                </a>
+                
+                <div class="font-mono text-xs uppercase text-right hidden md:block">
+                    <span>END_OF_FILE</span><br/>
+                    <span>{post.slug}.md</span>
+                </div>
+            </div>
+        </article>
+        
+        <!-- Bottom Marquee -->
+        <div class="w-full bg-black text-white overflow-hidden whitespace-nowrap py-1 border-t border-white">
+            <div class="animate-marquee-reverse inline-block font-mono text-xs uppercase tracking-widest">
+                THANKS FOR READING — CHIAMAMIAL GUIDE — SHARE THIS KNOWLEDGE — THANKS FOR READING — CHIAMAMIAL GUIDE — SHARE THIS KNOWLEDGE —
+            </div>
+        </div>
+    </div>
+</Layout>
