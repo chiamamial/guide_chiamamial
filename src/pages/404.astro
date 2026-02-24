@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 - System Failure" minimal={true}>
+    <div class="h-screen w-full flex flex-col justify-between bg-black text-white overflow-hidden relative">
+        
+        <!-- Technical Top Bar -->
+        <div class="absolute top-0 left-0 w-full h-8 bg-orange-600 text-black z-50 flex items-center justify-between px-4 font-mono text-[10px] uppercase">
+            <span>ERROR_CODE: 404</span>
+            <span class="animate-pulse">CRITICAL_FAILURE</span>
+            <span class="hidden md:inline">LOCATOR_MALFUNCTION</span>
+        </div>
+
+        <!-- Main Content Center -->
+        <div class="flex-1 flex flex-col justify-center items-center relative z-10 px-6">
+            <div class="relative">
+                <h1 class="text-[12rem] md:text-[20rem] font-display leading-[0.8] tracking-tighter text-transparent stroke-text select-none" style="-webkit-text-stroke: 2px white;">
+                    404
+                </h1>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center">
+                    <p class="font-mono text-sm md:text-base uppercase bg-black text-orange-600 px-2 inline-block border border-orange-600">
+                        Page_Not_Found
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center max-w-lg">
+                <p class="font-mono text-xs uppercase mb-8 leading-relaxed text-gray-400">
+                    The requested data segment could not be retrieved from the server matrix. 
+                    The link may be broken, or the page has been moved to a secure archive.
+                </p>
+
+                <a href="/" class="group inline-flex items-center gap-4 border-2 border-white px-8 py-4 hover:bg-white hover:text-black transition-all">
+                    <span class="text-xl font-bold">←</span>
+                    <span class="text-sm uppercase tracking-widest font-bold font-mono">Reboot System</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Background Glitch Elements -->
+        <div class="absolute inset-0 pointer-events-none opacity-20">
+            <div class="absolute top-1/4 left-10 w-64 h-64 border border-white rounded-full animate-spin-slow"></div>
+            <div class="absolute bottom-1/4 right-10 w-96 h-96 border border-white rounded-full animate-spin-reverse"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-px bg-white rotate-45"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-px bg-white -rotate-45"></div>
+        </div>
+
+        <!-- Bottom Marquee -->
+        <div class="w-full bg-white text-black overflow-hidden whitespace-nowrap py-1 border-t border-black">
+            <div class="animate-marquee inline-block font-mono text-xs uppercase tracking-widest">
+                SYSTEM ERROR — 404 — PAGE NOT FOUND — CHECK CONNECTION — SYSTEM ERROR — 404 — PAGE NOT FOUND — CHECK CONNECTION —
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .stroke-text {
+        -webkit-text-fill-color: transparent;
+    }
+    
+    @keyframes spin-reverse {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
+    }
+    .animate-spin-reverse {
+        animation: spin-reverse 20s linear infinite;
+    }
+</style>
